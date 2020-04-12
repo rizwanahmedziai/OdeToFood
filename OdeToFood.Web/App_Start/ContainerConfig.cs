@@ -17,7 +17,9 @@ namespace OdeToFood.Web
         {
             var builder = new ContainerBuilder();
 
+            //Register MVC Controller
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
+            // Register Web Api Controller
             builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
 
             builder.RegisterType<InMemoryRestaurantData>()
@@ -25,7 +27,11 @@ namespace OdeToFood.Web
                    .SingleInstance();
 
             var container = builder.Build();
+            // Dependency Resolver for MVC
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+
+            // Dependency Resolver for Web Api
+            // Both MVC and WebApi both frameworks use different methods for this
             httpConfiguration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
         }
