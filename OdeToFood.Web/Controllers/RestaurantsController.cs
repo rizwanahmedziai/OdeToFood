@@ -46,9 +46,20 @@ namespace OdeToFood.Web.Controllers
         [ValidateAntiForgeryToken, HttpPost]
         public ActionResult Create(Restaurant restaurant)
         {
-            db.Add(restaurant);
+            // ValidateEntry(restaurant);
+            // Use Data Annotations to valid entries instead [Required]
+            if (ModelState.IsValid)
+            {
+                db.Add(restaurant);
+
+                //First Technique for Post-Redirect-Get pattern for form submission
+                //return RedirectToAction("Index");
+                //Second Technique is to redirect to details passing id object
+                return RedirectToAction("Details", new { id = restaurant.Id});
+            }
             return View();
         }
+
         public ActionResult Edit(int id)
         {
             return View();
@@ -57,6 +68,18 @@ namespace OdeToFood.Web.Controllers
         public ActionResult Delete(int id)
         {
             return View();
+        }
+
+        private void ValidateEntry(Restaurant restaurant)
+        {
+            // If there aren't any errors
+            // A better way is to use data annotations 
+     
+            if (String.IsNullOrEmpty(restaurant.Name))
+            {
+                ModelState.AddModelError("Name",
+                    "The Name field value cannot be empty!");
+            }
         }
 
     }
