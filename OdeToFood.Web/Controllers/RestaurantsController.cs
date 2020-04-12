@@ -35,5 +35,18 @@ namespace OdeToFood.Web.Controllers
             }
             return View(model);
         }
+        public ActionResult Create()
+        {
+            return View();
+        }
+        public ActionResult Edit(int id)
+        {
+            return View();
+        }
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
+
     }
 }
