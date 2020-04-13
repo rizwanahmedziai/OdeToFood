@@ -55,7 +55,7 @@ namespace OdeToFood.Web.Controllers
                 //First Technique for Post-Redirect-Get pattern for form submission
                 //return RedirectToAction("Index");
                 //Second Technique is to redirect to details passing id object
-                return RedirectToAction("Details", new { id = restaurant.Id});
+                return RedirectToAction("Details", new { id = restaurant.Id });
             }
             return View();
         }
@@ -77,19 +77,35 @@ namespace OdeToFood.Web.Controllers
                 db.Update(restaurant);
                 return RedirectToAction("Details", new { id = restaurant.Id });
             }
-                return View(restaurant);
+            return View(restaurant);
         }
-        [HttpDelete]
+        [HttpGet]
         public ActionResult Delete(int id)
         {
-            return View();
+            var model = db.Get(id);
+            if (model == null)
+            {
+                return View("NotFound");
+            }
+            return View(model);
+        }
+
+        // Must use HttpPost for even Delete function instead of HttpDelete as browsers only understand in 
+        // terms of Get and Post
+
+        [ValidateAntiForgeryToken, HttpPost]
+        public ActionResult Delete(Restaurant restaurant)
+        {
+            db.Delete(restaurant);
+            return RedirectToAction("Index");
+
         }
 
         private void ValidateEntry(Restaurant restaurant)
         {
             // If there aren't any errors
             // A better way is to use data annotations 
-     
+
             if (String.IsNullOrEmpty(restaurant.Name))
             {
                 ModelState.AddModelError("Name",
