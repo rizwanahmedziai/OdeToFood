@@ -24,6 +24,18 @@ namespace OdeToFood.Data.Services
             restaurants.Add(restaurant);
             restaurant.Id = restaurants.Max(r => r.Id) + 1;
         }
+        public void Update(Restaurant restaurant)
+        {
+            int restaurantIndex = restaurants.FindIndex(e => e.Id == restaurant.Id);
+
+            if(restaurantIndex == -1)
+            {
+                throw new Exception (
+                    
+                    string.Format("Unable to find an entry with an ID of {0}", restaurant.Id));
+            }
+            restaurants[restaurantIndex] = restaurant;
+        }
 
         public Restaurant Get(int id)
         {
@@ -34,5 +46,7 @@ namespace OdeToFood.Data.Services
         {
             return restaurants.OrderBy(r => r.Name);
         }
+
+        
     }
 }
