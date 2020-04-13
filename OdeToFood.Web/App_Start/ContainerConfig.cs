@@ -22,9 +22,18 @@ namespace OdeToFood.Web
             // Register Web Api Controller
             builder.RegisterApiControllers(typeof(MvcApplication).Assembly);
 
-            builder.RegisterType<InMemoryRestaurantData>()
+            // Commented Out after connecting database
+            //----------------------------------------------
+            //builder.RegisterType<InMemoryRestaurantData>()
+            //       .As<IRestaurantData>()
+            //       .SingleInstance();
+            // ---------------------------------
+            // End Comment. New code below
+
+            builder.RegisterType<SqlRestaurantData>()
                    .As<IRestaurantData>()
-                   .SingleInstance();
+                   .InstancePerRequest();
+            builder.RegisterType<OdeToFoodDbContext>().InstancePerRequest();
 
             var container = builder.Build();
             // Dependency Resolver for MVC
